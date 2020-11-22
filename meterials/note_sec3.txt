@@ -21,9 +21,15 @@ LINUX BOOTING PROCESS
     + The source code is closed
     + Responsible for loading and running the second stage bootloader such as SPL or MLO
     + Run from ROM
+    + Configure watchdog, PLL
+    + Copy SPL / MLO into SDRAM then run it
  - SPL (Secondary Program Loader) / MLO (Memory Loader):
     + Responsible for loading and executing the third stage bootloader such as U-boot from the DDR
     + Run from internal SDRAM
+    + Initialize UART, print out debug message
+    + Reconfigure PLL to desired values
+    + Initialize DDR registers
+    + Configure suitable peripherals to load the U-boot image into the DDR
  - U-boot:
     + Load and run the linux kernel
     + Run from DDR
