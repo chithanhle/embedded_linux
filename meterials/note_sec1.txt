@@ -4,3 +4,6 @@ SysFS:
 DDR3:
  - double data rate type 3
  - a RAM of tyope synchronous dynamic random - access memory (SDRAM)
+SBC:
+ - single board computer
+ 
