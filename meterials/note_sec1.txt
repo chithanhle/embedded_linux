@@ -1,0 +1,6 @@
+SysFS:
+ - An on the fly file system exists on the RAM
+ - A window for the user space to peek into the subsystem of linux kernel
+DDR3:
+ - double data rate type 3
+ - a RAM of tyope synchronous dynamic random - access memory (SDRAM)
