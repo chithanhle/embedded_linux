@@ -1,0 +1,3 @@
+[submodule "meterials/EmbeddedLinuxBBB"]
+	path = meterials/EmbeddedLinuxBBB
+	url = git@github.com:niekiran/EmbeddedLinuxBBB.git
