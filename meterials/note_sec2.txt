@@ -1,2 +1,4 @@
 PoE:
  - Power over ethernet
+
+The AM335x doesn't have any DSP coprocessor
