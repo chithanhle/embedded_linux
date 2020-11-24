@@ -30,11 +30,15 @@ LINUX BOOTING PROCESS
     + Reconfigure PLL to desired values
     + Initialize DDR registers
     + Configure suitable peripherals to load the U-boot image into the DDR
+    + The MLO is the SPL plus an SPL's start address value
  - U-boot:
     + Load and run the linux kernel
     + Run from DDR
+    + Look for uImage (ELF)
  - Linux kernel:
     + Run from DDR
+    + uImage = zImage (ELF) + u-boot header (64 bytes)
+    + zImage is the ELF of the linux kernel
  - RFS (Root file system):
     + Run from eMMC
 2. Boot options
@@ -53,3 +57,5 @@ LINUX BOOTING PROCESS
       The corresponding orders would be: 
       * eMMC - SD card - UART0 - USB0
       * SPI - SD card - USB0 - UART0
+3. uSD partition
+ - BOOT (FAT) - ROOTFS (EXT3 / EXT4)
