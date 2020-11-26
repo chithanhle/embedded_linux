@@ -38,6 +38,21 @@ LINUX BOOTING PROCESS
  - Linux kernel:
     + Run from DDR
     + uImage = zImage (ELF) + u-boot header (64 bytes)
+    + U-boot image header
+         typedef struct image_header {
+            uint32_t	   ih_magic;	         /* Image Header Magic Number	*/
+            uint32_t	   ih_hcrc;	            /* Image Header CRC Checksum	*/
+            uint32_t	   ih_time;	            /* Image Creation Timestamp	*/
+            uint32_t	   ih_size;	            /* Image Data Size		*/
+            uint32_t	   ih_load;	            /* Data	 Load  Address		*/
+            uint32_t	   ih_ep;		         /* Entry Point Address		*/
+            uint32_t	   ih_dcrc;	            /* Image Data CRC Checksum	*/
+            uint8_t	   ih_os;	            /* Operating System		*/
+            uint8_t	   ih_arch;	            /* CPU architecture		*/
+            uint8_t	   ih_type;	            /* Image Type			*/
+            uint8_t	   ih_comp;	            /* Compression Type		*/
+            uint8_t	   ih_name[IH_NMLEN];	/* Image Name		*/
+         } image_header_t;
     + zImage is the ELF of the linux kernel
  - RFS (Root file system):
     + Run from eMMC
@@ -59,3 +74,53 @@ LINUX BOOTING PROCESS
       * SPI - SD card - USB0 - UART0
 3. uSD partition
  - BOOT (FAT) - ROOTFS (EXT3 / EXT4)
+4. U-boot interaction
+ - To enter u-boot: press any key a the very beginning of booting process
+ - load
+ - md
+ - imi
+5. Control flow from u-boot to user application
+
+   U-boot+                                                           BOOTLOADER
+         |
+         |
+   +------------------------------------------------------------+
+         |
+         |
+         +------>head.S+-------->misc.c                              LINUX'S BOOT STRAP LOADER
+                  +
+                  |
+   +------------------------------------------------------------+
+                  |
+                  v
+               head.S+-------->head-common.c+----->main.c          LINUX KERNEL
+                                                      +
+                                                      |
+   +------------------------------------------------------------+
+                                                      |
+                                                      v
+                                                      init           USER APPLICATION
+
+5.1 U-boot -> head.S
+ - ow does u-boot pass control to boot strap loader? Read arch/arm/lib/bootm.c in the u-boot repo
+ - Kernel entry funcptr:
+ void (*kernel_entry)(int zero, int arch, uint params);
+   * zero = 0
+   * arch = machine id which is detected by the u-boot, passed to linux via register r1
+   * params = address of the DTB presented in the DDR, passed to linux via register r2
+5.2 head.S
+ - Location: arch/arm/boot/compressed/head.S in the linux repo
+ - Entry point symbol: start
+ - Architecture specific code
+5.3 misc.c
+ - Location: arch/arm/boot/compressed/misc.c
+ - decompress_kernel
+5.4 head.S in linux kernel
+ - Location: arch/arm/kernel/head.S
+ - Architecture specific code
+5.5 main.c
+ - rest_init
+   + kernel_init
+   + kthreadd
+ - free init mem
+ - execute init programs
